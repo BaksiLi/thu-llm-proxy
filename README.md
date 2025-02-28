@@ -1,10 +1,12 @@
-# THU LLM Proxy Gateway 清华大模型反向代
+# THU LLM Proxy Gateway
 
-你清有了自己的 DeepSeek 实例，但是限制校园网登陆，于是便有了本项目。  
+清华大模型反代
+> 你清有了自己的 DeepSeek 实例，但是限制校园网登陆，于是便有了本项目。  
 
 ## ✨ Features 
 - 🔁 Reverse proxy for campus-only LLM APIs
 - 🚀 Stream response optimization (filter empty chunks)
+- - [ ] 🔒 Safety features (IP whitelist)
 
 
 ## ⚙️ Configuration
@@ -17,7 +19,7 @@ HOST_ADDRESS=api.example.com
 UPSTREAM_ENDPOINT=https://madmodel.cs.tsinghua.edu.cn
 ```
 
-## 🚀 Deployment 部署步骤
+## 🚀 Deployment
 ```
 # 1. Clone repository
 git clone https://github.com/yourname/thu-llm-proxy
@@ -32,9 +34,9 @@ curl -v -x POST http://localhost:${PROXY_PORT}/v1/chat/completions
 
 ## 🌐 Usage
 ```
-curl --location --request POST 'http://api.example.com:11443/v1/chat/completions' \
+curl --location -X POST 'http://api.example.com:11443/v1/chat/completions' \
 --header 'Content-Type: application/json' \
---header 'Authorization: Bearer YOUR_TOKEN' \
+--header 'Authorization: Bearer <YOUR_TOKEN>' \
 -d '{
   "model": "DeepSeek-R1-Distill-32B",
   "messages": [
