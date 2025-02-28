@@ -1,0 +1,25 @@
+version: '3.8'
+
+services:
+  nginx-proxy:
+    container_name: nginx-proxy
+    build:
+      context: .
+      args:
+        PROXY_PORT: ${PROXY_PORT:-11443} # Default port 11443 if not specified
+    ports:
+      - "${PROXY_PORT:-11443}:${PROXY_PORT:-11443}"
+    volumes:
+      - ./nginx.conf:/etc/nginx/conf.d/default.conf:ro
+      - ./filter_empty_chunks.lua:/usr/local/openresty/nginx/conf/filter_empty_chunks.lua:ro
+    restart: unless-stopped
+    environment:
+      - PROXY_PORT=${PROXY_PORT:-11443}
+      - HOST_ADDRESS=${HOST_ADDRESS:-api.example.com} # Default host address
+    networks:
+      - proxy-network
+
+networks:
+  proxy-network:
+    driver: bridge
+
