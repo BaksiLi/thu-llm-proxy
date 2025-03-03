@@ -7,19 +7,11 @@
 
 - 🔁 Reverse proxy for campus-only LLM APIs
 - 🚀 Stream response optimization (filter empty chunks)
-- - [ ] 🔒 Safety features (IP whitelist)
+- 🔒 Safety features (IP whitelist)
 
 ## ⚙️ Configuration
 
-Create `.env` file:
-
-```
-PROXY_PORT=11443
-
-HOST_ADDRESS=api.example.com
-
-UPSTREAM_ENDPOINT=https://madmodel.cs.tsinghua.edu.cn
-```
+Use `./docker-compose.yaml` and modify.
 
 ## 🚀 Deployment
 
@@ -34,6 +26,16 @@ docker-compose up -d --build
 # 3. Verify
 curl -v -X POST http://localhost:${PROXY_PORT}/v1/chat/completions
 ```
+
+### IP Allowlist Configuration (require host mode)
+
+The IP allowlist should be used when the proxy is directly exposed to the internet (e.g., not behind another reverse proxy like Nginx, Caddy, or Traefik). In such setups, using Docker's host network mode is recommended.
+
+- **Default (LAN)**: By default, the proxy is configured to allow access from common local network IP ranges (`192.168.0.0/16` and `10.0.0.0/8`).
+- Specific networks: `ALLOWLIST_CONFIG=allow 192.168.1.0/24; allow 10.0.0.0/8; deny all;`
+- Single IP: `ALLOWLIST_CONFIG=allow 203.0.113.10; deny all;`
+- Disable: Leave empty or set to a comment
+
 
 ## 🌐 Usage
 
