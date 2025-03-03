@@ -1,19 +1,19 @@
 FROM openresty/openresty:latest
 
-# Install necessary dependencies (e.g., curl) if needed
-RUN apt-get update && apt-get install -y --no-install-recommends curl
+# Install necessary dependencies
+RUN apt-get update && apt-get install -y --no-install-recommends curl gettext-base
 
 # Create directory for custom configurations
 RUN mkdir -p /etc/nginx/conf.d
-
-# Copy custom nginx.conf
-COPY nginx.conf /etc/nginx/conf.d/default.conf
-
-# Copy Lua script
-COPY filter_empty_chunks.lua /usr/local/openresty/nginx/conf/filter_empty_chunks.lua
 
 # Expose port - defined in ENV at docker-compose
 ARG PROXY_PORT=11443
 ENV PROXY_PORT=${PROXY_PORT}
 EXPOSE ${PROXY_PORT}
+
+# Add an entrypoint script to handle environment variable substitution
+COPY docker-entrypoint.sh /docker-entrypoint.sh
+RUN chmod +x /docker-entrypoint.sh
+
+ENTRYPOINT ["/docker-entrypoint.sh"]
 
